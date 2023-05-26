@@ -29,6 +29,7 @@
   InlineEditConditionToggle
   ExposeOnSpawn="true"
   AllowedClasses="Class1, Class2, .."
+  Categories="GameplayTag.Name"（用于GameplayTag和GameplayTagContainer，[Reference](https://github.com/tranek/GASDocumentation#42-gameplay-tags)）
 
 ## UCLASS
 
