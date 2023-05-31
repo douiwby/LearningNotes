@@ -25,7 +25,7 @@
   ClampMin="N"/ClampMax="N"
   DisplayName="Property Name"
   DisplayThumbnail="true"
-  EditCondition="BooleanPropertyName"
+  EditCondition="BooleanPropertyName"（可以使用C++表达式，比如enum: "Type == ETypeName::Value"）
   InlineEditConditionToggle
   ExposeOnSpawn="true"
   AllowedClasses="Class1, Class2, .."
