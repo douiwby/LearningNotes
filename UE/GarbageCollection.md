@@ -42,6 +42,7 @@
 	template <bool bParallel, bool bWithClusters>
 	void MarkObjectsAsUnreachable(TArray<UObject*>& ObjectsToSerialize, const EObjectFlags KeepFlags)
 ```
+
 接着会调用`PerformReachabilityAnalysisOnObjectsInternal`执行Reachability检查。
 
 ```C++
@@ -129,8 +130,10 @@ void UClass::AssembleReferenceTokenStream(bool bForce)
 
 ![IncrementalPurgeGarbage](Image/IncrementalPurgeGarbage.png)
 
-首先`UnhashUnreachableObjects`会对`GUnreachableObjects`里的对象逐个调用`ConditionalBeginDestroy`。 
-接着在`IncrementalDestroyGarbage`里同样会遍历对象，对`IsReadyForFinishDestroy`的调用`ConditionalFinishDestroy，其余的加入`GGCObjectsPendingDestruction`里。如果还有时间，则对`GGCObjectsPendingDestruction`进行同样的处理。  
+首先`UnhashUnreachableObjects`会对`GUnreachableObjects`里的对象逐个调用`ConditionalBeginDestroy`。
+
+接着在`IncrementalDestroyGarbage`里同样会遍历对象，对`IsReadyForFinishDestroy`的调用`ConditionalFinishDestroy，其余的加入`GGCObjectsPendingDestruction`里。如果还有时间，则对`GGCObjectsPendingDestruction`进行同样的处理。
+
 最后会使用`FAsyncPurge`来调用析构函数和释放内存(``GUObjectAllocator.FreeUObject(Object);``)，其也支持多线程工作。
 
 至此整个GC的流程就完成了。
