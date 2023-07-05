@@ -118,7 +118,7 @@ void UClass::AssembleReferenceTokenStream(bool bForce)
 
 #### FGCReferenceProcessor::HandleObjectReference
 
-拿到TokenStream后，会调用到`FGCReferenceProcessor::HandleObjectReference`里。这里会标记所有引用到的UObject（通过清掉EInternalObjectFlags::Unreachable来达成）。
+拿到TokenStream后，会调用到`FGCReferenceProcessor::HandleObjectReference`里。这里会检查所有引用到的UObject。若UObject已经被标记为IsPendingKill，则这里会将引用置为空。若否则清掉EInternalObjectFlags::Unreachable标记。
 
 ![HandleObjectReference](Image/FGCReferenceProcessor.HandleObjectReference.png)
 
@@ -132,7 +132,7 @@ void UClass::AssembleReferenceTokenStream(bool bForce)
 
 首先`UnhashUnreachableObjects`会对`GUnreachableObjects`里的对象逐个调用`ConditionalBeginDestroy`。
 
-接着在`IncrementalDestroyGarbage`里同样会遍历对象，对`IsReadyForFinishDestroy`的调用`ConditionalFinishDestroy，其余的加入`GGCObjectsPendingDestruction`里。如果还有时间，则对`GGCObjectsPendingDestruction`进行同样的处理。
+接着在`IncrementalDestroyGarbage`里同样会遍历对象，对`IsReadyForFinishDestroy`的调用`ConditionalFinishDestroy`，其余的加入`GGCObjectsPendingDestruction`里。如果还有时间，则对`GGCObjectsPendingDestruction`进行同样的处理。
 
 最后会使用`FAsyncPurge`来调用析构函数和释放内存(``GUObjectAllocator.FreeUObject(Object);``)，其也支持多线程工作。
 

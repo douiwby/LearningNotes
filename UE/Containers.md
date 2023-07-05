@@ -33,6 +33,10 @@ for (auto* MyShape : MyShapeArray) // 使用auto时记得使用指针或引用
 排序:  
 Sort使用introspective sort(quick sort+heap sort)，StableSort使用MergeSort
 
+RemoveAll优化:  
+在寻找匹配的元素时，用分段的形式，而不是一个个删除。删除一段匹配的元素时调用析构函数，之后并不马上移动后面的元素，而是直到找到下一个匹配的元素，这样得到了一段不匹配的元素，只移动这一段元素。这样避免了靠后的元素多次移动。  
+例如:(1,2,3,3,3,4,5,3,3,3,6)移除3的流程为：(1,2,x,x,x,4,5,3,3,3,6)->(1,2,4,5,x,x,x,3,3,3,6)->(1,2,4,5,x,x,x,x,x,x,6)->(1,2,4,5,6,x,x,x,x,x,x)
+
 ## TMap/TSet/TSparseArray
 
 `TMap`使用哈希表存储数据，其查询速度非常快。`TMap`使用`TSet`实现，而`TSet`使用`TSparseArray`实现。
