@@ -137,3 +137,7 @@ void UClass::AssembleReferenceTokenStream(bool bForce)
 最后会使用`FAsyncPurge`来调用析构函数和释放内存(``GUObjectAllocator.FreeUObject(Object);``)，其也支持多线程工作。
 
 至此整个GC的流程就完成了。
+
+### 簇(cluster)
+
+> The garbage collection process in Unreal Engine builds clusters of objects that are all destroyed together. Clustering reduces the total time and overall memory churn associated with garbage collection compared to deleting objects indivudally. As an object loads, it may create subobjects. By combining the object and its subobjects into a single cluster for the garbage collector, the engine can delay freeing the resources used by the cluster until the entire object is ready to be freed, and can then free all of the resources at once.
